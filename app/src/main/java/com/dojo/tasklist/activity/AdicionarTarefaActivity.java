@@ -1,8 +1,10 @@
-package com.dojo.tasklist;
+package com.dojo.tasklist.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.dojo.tasklist.R;
 
 public class AdicionarTarefaActivity extends AppCompatActivity {
 
