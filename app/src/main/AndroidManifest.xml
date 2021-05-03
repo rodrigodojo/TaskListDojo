@@ -8,12 +8,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TaskList">
+        android:theme="@style/Theme.TaskList"        >
         <activity android:name=".activity.AdicionarTarefaActivity"></activity>
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.TaskList.NoActionBar">
+            android:theme="@style/Theme.TaskList.NoActionBar"
+            android:screenOrientation="sensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

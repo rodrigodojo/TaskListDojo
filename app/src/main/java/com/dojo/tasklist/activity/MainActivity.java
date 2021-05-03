@@ -1,11 +1,15 @@
 package com.dojo.tasklist.activity;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.dojo.tasklist.R;
 import com.dojo.tasklist.adapter.TarefasAdapter;
+import com.dojo.tasklist.helper.DbHelper;
 import com.dojo.tasklist.helper.RecyclerItemClickListener;
+import com.dojo.tasklist.helper.TarefaDAO;
 import com.dojo.tasklist.model.Tarefa;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -21,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         recyclerView = findViewById(R.id.recyclerView);
+
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(
                         getApplicationContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
@@ -74,13 +80,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void carregarListaTarefas(){
 
-        Tarefa tarefa1 = new Tarefa();
-        tarefa1.setNomeTarefa("ir ao mercado");
-        listaTarefas.add(tarefa1);
-
-        Tarefa tarefa2 = new Tarefa();
-        tarefa2.setNomeTarefa("ir a feira");
-        listaTarefas.add(tarefa2);
+        TarefaDAO tarefaDAO = new TarefaDAO(getApplicationContext());
+        listaTarefas = tarefaDAO.listar();
 
         tarefasAdapter = new TarefasAdapter(listaTarefas);
 
@@ -99,23 +100,22 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()){
+            case R.id.itemEditar:
+                Toast.makeText(MainActivity.this,"Item Editar",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.itemConfigurar:
+                Toast.makeText(MainActivity.this,"Item Configurar",Toast.LENGTH_SHORT).show();
+                break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
