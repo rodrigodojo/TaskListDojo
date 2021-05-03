@@ -26,7 +26,6 @@ public class TarefaDAO implements iTarefaDAO{
     public boolean salvar(Tarefa tarefa) {
         ContentValues cv = new ContentValues();
         cv.put("nome",tarefa.getNomeTarefa());
-
         try{
             escreve.insert(DbHelper.TABELA_TAREFAS,null,cv);
             return true;
@@ -37,7 +36,15 @@ public class TarefaDAO implements iTarefaDAO{
 
     @Override
     public boolean atualizar(Tarefa tarefa) {
-        return false;
+        ContentValues cv = new ContentValues();
+        cv.put("nome",tarefa.getNomeTarefa());
+        try{
+            String[] args = {tarefa.getId().toString()};
+            escreve.update(DbHelper.TABELA_TAREFAS,cv,"id=? ",args);
+        }catch (Exception e){
+            return false;
+        }
+        return true;
     }
 
     @Override
