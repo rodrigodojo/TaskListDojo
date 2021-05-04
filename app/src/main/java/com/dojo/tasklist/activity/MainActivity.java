@@ -1,7 +1,9 @@
 package com.dojo.tasklist.activity;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private TarefasAdapter tarefasAdapter;
     private List<Tarefa> listaTarefas = new ArrayList<>();
+    private Tarefa tarefaSelecionada;
 
 
     @Override
@@ -54,13 +57,32 @@ public class MainActivity extends AppCompatActivity {
                         Tarefa tarefaSelecionada = listaTarefas.get(position);
                         Intent intent = new Intent(MainActivity.this,AdicionarTarefaActivity.class);
                         intent.putExtra("tarefaSelecionada",tarefaSelecionada );
-
                         startActivity( intent );
                     }
 
                     @Override
                     public void onLongItemClick(View view, int position) {
+                        tarefaSelecionada = listaTarefas.get(position);
 
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                        dialog.setTitle("Confirmar exclusão");
+                        dialog.setMessage("Deseja excluir a tarefa: "+ tarefaSelecionada.getNomeTarefa()+" ?");
+                        dialog.setNegativeButton("Sim", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                TarefaDAO tarefaDAO = new TarefaDAO(getApplicationContext());
+                                if(tarefaDAO.deletar(tarefaSelecionada)){
+                                    carregarListaTarefas();
+                                    Toast.makeText(MainActivity.this," tarefa ao deletar com sucesso!",Toast.LENGTH_SHORT).show();
+                                }else{
+                                    Toast.makeText(MainActivity.this,"Erro ao deletar tarefa!",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                        dialog.setPositiveButton("Não", null);
+                        dialog.create();
+                        dialog.show();
+                        
                     }
 
                     @Override
@@ -103,23 +125,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (item.getItemId()){
-            case R.id.itemEditar:
-                Toast.makeText(MainActivity.this,"Item Editar",Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.itemConfigurar:
-                Toast.makeText(MainActivity.this,"Item Configurar",Toast.LENGTH_SHORT).show();
-                break;
-        }
         return super.onOptionsItemSelected(item);
     }
 }
